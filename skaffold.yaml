@@ -1,0 +1,12 @@
+apiVersion: skaffold/v4beta1
+kind: Config
+metadata:
+  name: skaffold-example
+deploy:
+  helm:
+    releases:
+    - name: my-app
+      chartPath: helm-chart
+      valuesFiles:
+      - helm-chart/values.yaml
+      version: 0.1.0
