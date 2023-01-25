@@ -2,11 +2,27 @@ apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: skaffold-example
-deploy:
+build:
+  artifacts:
+    - image: skaffold_example_test
+  local:
+    push: false
+manifests:
   helm:
     releases:
-    - name: my-app
-      chartPath: helm-chart
-      valuesFiles:
-      - helm-chart/values.yaml
-      version: 0.1.0
+      - name: my-app
+        chartPath: ./helm-chart
+        valuesFiles:
+          - ./helm-chart/values.yaml
+        setValueTemplates:
+          image.repository: "{{ .IMAGE_REPO_skaffold_example_test }}"
+          image.tag: "{{ .IMAGE_TAG_skaffold_example_test }}"
+deploy:
+  helm: {}
+  kubeContext: minikube
+portForward:
+  - resourceType: deployment
+    resourceName: my-app
+    port: 8080
+    address: 0.0.0.0
+    localPort: 9000
