@@ -15,10 +15,10 @@ manifests:
         valuesFiles:
           - ./helm-chart/values.yaml
         setValueTemplates:
+          # use skaffold-generated image repo and tag for our deployment
           image.repository: "{{ .IMAGE_REPO_skaffold_example_test }}"
           image.tag: "{{ .IMAGE_TAG_skaffold_example_test }}"
 deploy:
-  helm: {}
   kubeContext: minikube
 portForward:
   - resourceType: deployment
